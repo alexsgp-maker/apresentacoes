@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101826">
+<meta property="og:title" content="Missão MCP">
+<meta property="og:description" content="Perceba em poucos minutos como a IA pode trabalhar dentro dos nossos sistemas.">
+<meta property="og:type" content="website">
+<title>Missão MCP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: stories em ecrã inteiro com pontos e desafios. Um slide por vez; toque à direita avança, à esquerda recua.
+   Mesma identidade da apresentação curta: tinta, laranja de máquina, betão, amarelo de sinalização. */
+:root {
+  --ink: #101826;
+  --ink-2: #1a2539;
+  --signal: #ff6b1a;
+  --sun: #ffc93c;
+  --sky: #5cc8ff;
+  --mint: #6ee7a8;
+  --pink: #ff8fb1;
+  --paper: #f3f5f7;
+  --concrete: #e4e9ee;
+  --line: #33425c;
+  --mute-dark: #a9b6c8;
+  --mute-light: #44526a;
+  --display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gut: 22px;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--ink); color: var(--paper);
+  font-family: var(--body); font-size: 16px; line-height: 1.45;
+  overflow: hidden; -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+.stage { position: relative; height: 100%; max-width: 460px; margin: 0 auto; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+
+.bars {
+  position: absolute; z-index: 5; top: 12px;
+  left: max(var(--gut), env(safe-area-inset-left, 0px));
+  right: max(var(--gut), env(safe-area-inset-right, 0px));
+  display: flex; gap: 4px; pointer-events: none;
+}
+.bar { flex: 1; height: 3px; border-radius: 2px; background: rgba(243,245,247,.28); transition: background .25s; }
+.bar.done { background: var(--paper); }
+.stage.tone-light .bar { background: rgba(16,24,38,.22); }
+.stage.tone-light .bar.done { background: var(--ink); }
+
+.hud {
+  position: absolute; z-index: 5; top: 24px;
+  right: max(var(--gut), env(safe-area-inset-right, 0px));
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px; border: 1.5px solid rgba(243,245,247,.4);
+  color: var(--paper); pointer-events: none; font-variant-numeric: tabular-nums;
+}
+.stage.tone-light .hud { color: var(--ink); border-color: rgba(16,24,38,.4); }
+.hud.pop { animation: pop .5s ease; }
+@keyframes pop { 30% { transform: scale(1.25); background: var(--sun); color: var(--ink); border-color: var(--sun); } }
+
+.slide {
+  --sbg: var(--ink); --sfg: var(--paper); --smute: var(--mute-dark); --sacc: var(--signal);
+  position: absolute; inset: 0; display: none; flex-direction: column;
+  padding-top: 58px; padding-bottom: 24px;
+  padding-left: max(var(--gut), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gut), env(safe-area-inset-right, 0px));
+  background: var(--sbg); color: var(--sfg); overflow-y: auto; overflow-x: hidden;
+}
+.slide.on { display: flex; }
+.s-ink2 { --sbg: var(--ink-2); }
+.s-signal { --sbg: var(--signal); --sfg: var(--ink); --smute: #4a1d05; --sacc: var(--ink); }
+.s-concrete { --sbg: var(--concrete); --sfg: var(--ink); --smute: var(--mute-light); --sacc: var(--signal); }
+.s-sun { --sbg: var(--sun); --sfg: var(--ink); --smute: #3b2f06; --sacc: var(--ink); }
+
+.inner { margin-block: auto; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.slide.on .inner > * { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+.slide.on .inner > *:nth-child(2) { animation-delay: .06s; }
+.slide.on .inner > *:nth-child(3) { animation-delay: .12s; }
+.slide.on .inner > *:nth-child(4) { animation-delay: .18s; }
+.slide.on .inner > *:nth-child(5) { animation-delay: .24s; }
+.slide.on .inner > *:nth-child(6) { animation-delay: .3s; }
+@keyframes rise { from { opacity: .15; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.label { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--smute); margin: 0; }
+h1, h2 { font-family: var(--display); font-weight: 800; letter-spacing: -.025em; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 9vw, 2.75rem); }
+h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+.hl { color: var(--sacc); }
+.s-ink .hl, .s-ink2 .hl { color: var(--signal); }
+p { margin: 0; }
+.lead { font-size: 1.05rem; color: var(--smute); max-width: 36ch; }
+.lead b { color: var(--sfg); font-weight: 700; }
+.hint { font-family: var(--mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--smute); display: flex; align-items: center; gap: 10px; }
+.hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.7); opacity: .45; } }
+
+/* bolhas */
+.b { padding: 11px 15px; border-radius: 18px; max-width: 90%; font-size: .98rem; }
+.b.user { align-self: flex-end; background: var(--ink); color: var(--paper); border-bottom-right-radius: 5px; font-weight: 500; }
+.b.ai { align-self: flex-start; background: #fff; border: 1px solid #c4ccd6; color: var(--ink); border-bottom-left-radius: 5px; }
+
+/* slide 1: missão */
+.mission { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.mission li { display: flex; align-items: center; gap: 12px; font-weight: 500; font-size: 1.02rem; }
+.box { flex: none; width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--mute-dark); display: grid; place-items: center; }
+.box.ok { background: var(--mint); border-color: var(--mint); }
+.box svg { width: 14px; height: 14px; }
+
+/* slide 2: restaurante */
+.pipe { font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--mute-dark); }
+.pipe b { color: var(--paper); font-weight: 500; }
+.rrows { display: flex; flex-direction: column; gap: 9px; }
+.rrow {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 7px; text-align: left; width: 100%;
+  background: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; transition: border-color .15s, transform .12s;
+}
+.rrow:active { transform: scale(.985); }
+.rrow[aria-expanded="true"] { border-color: var(--mint); }
+.role { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); padding: 2px 9px; border-radius: 999px; }
+.rrow:nth-child(1) .role { background: var(--sky); }
+.rrow:nth-child(2) .role { background: var(--sun); }
+.rrow:nth-child(3) .role { background: var(--mint); }
+.rrow:nth-child(4) .role { background: var(--pink); }
+.rrow .q { font-family: var(--display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; }
+.rrow .q::after { content: "  toque"; font-family: var(--mono); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--signal); }
+.rrow[aria-expanded="true"] .q { display: none; }
+.rrow .a { font-size: .98rem; line-height: 1.35; }
+.rrow .a b { font-family: var(--display); font-weight: 800; font-size: 1.1rem; }
+.rrow .a[hidden] { display: none; }
+.found { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); }
+
+/* slide 3: demonstração */
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chip { text-align: left; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 10px 12px; font-weight: 700; font-size: .92rem; line-height: 1.2; color: var(--ink); transition: transform .12s; min-width: 0; }
+.chip:active { transform: scale(.97); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.demo { display: flex; flex-direction: column; gap: 9px; min-height: 250px; }
+.trace { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.trace li { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; line-height: 1.3; animation: rise .35s both; }
+.trace .dot { flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--mint); margin-top: 1px; display: grid; place-items: center; }
+.trace .dot svg { width: 10px; height: 10px; }
+.trace li.ask .dot { background: var(--sun); }
+.fn { font-family: var(--mono); font-size: .78rem; background: var(--ink); color: var(--sun); padding: 1px 7px; border-radius: 6px; white-space: nowrap; }
+.row2 { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 2px solid var(--ink); border-radius: 10px; background: #fff; color: var(--ink); padding: 8px 16px; font-weight: 700; font-size: .92rem; }
+.btn.go { background: var(--ink); color: var(--paper); }
+.res { font-size: .95rem; line-height: 1.4; }
+.res ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.res li { padding: 7px 10px; background: #eef1f5; border-radius: 8px; font-size: .88rem; }
+.note { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mute-light); }
+
+/* slide 4: requisitos */
+.pill { align-self: flex-start; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); padding: 4px 12px; border-radius: 999px; }
+.pill.base { background: var(--mint); }
+.pill.mcp { background: var(--signal); }
+.reqs { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.reqs strong { display: block; font-family: var(--display); font-size: 1.1rem; line-height: 1.15; }
+.reqs span { color: var(--mute-dark); font-size: .9rem; line-height: 1.3; display: block; }
+.grp { display: flex; flex-direction: column; }
+
+/* slide 5: diagnóstico */
+.diag { display: flex; flex-direction: column; gap: 7px; }
+.drow { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 8px 8px 8px 14px; }
+.drow strong { font-family: var(--display); font-size: 1.02rem; line-height: 1.15; min-width: 0; }
+.yn { display: flex; gap: 6px; flex: none; }
+.yn button { border: 2px solid #4a5a76; background: none; border-radius: 9px; padding: 6px 12px; font-weight: 700; font-size: .85rem; min-width: 50px; }
+.yn button[data-v="1"][aria-pressed="true"] { background: var(--mint); border-color: var(--mint); color: var(--ink); }
+.yn button[data-v="0"][aria-pressed="true"] { background: var(--pink); border-color: var(--pink); color: var(--ink); }
+.meter { height: 10px; border-radius: 6px; background: rgba(16,24,38,.2); overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0; background: var(--ink); border-radius: 6px; transition: width .35s; }
+.mline { display: flex; justify-content: space-between; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+.verdict { background: var(--paper); color: var(--ink); border-radius: 14px; padding: 13px 15px; font-size: .95rem; line-height: 1.35; min-height: 3.9em; }
+.verdict b { font-family: var(--display); font-size: 1.05rem; }
+
+/* slide 6: cuidados */
+.cares { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.cares strong { display: block; font-family: var(--display); font-size: 1.25rem; line-height: 1.15; }
+.cares span { font-size: .95rem; line-height: 1.35; color: #3a1604; display: block; }
+.warn { background: var(--ink); color: var(--paper); border-radius: 14px; padding: 14px 16px; font-size: .95rem; }
+.warn b { color: var(--sun); }
+
+/* slide 7: quiz */
+.qtext { font-family: var(--display); font-weight: 800; font-size: clamp(1.45rem, 6.6vw, 1.9rem); line-height: 1.1; letter-spacing: -.02em; text-wrap: balance; }
+.opts { display: flex; flex-direction: column; gap: 9px; }
+.opt { text-align: left; background: var(--ink); border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; font-weight: 500; font-size: .98rem; line-height: 1.3; transition: transform .12s; }
+.opt:active { transform: scale(.985); }
+.opt.right { background: var(--mint); border-color: var(--mint); color: var(--ink); }
+.opt.wrong { background: var(--pink); border-color: var(--pink); color: var(--ink); }
+.opt:disabled { cursor: default; }
+.opt:disabled:not(.right):not(.wrong) { opacity: .5; }
+.fb { font-size: .95rem; line-height: 1.35; color: var(--paper); min-height: 2.7em; }
+.fb b { color: var(--sun); }
+.qfoot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.go2 { background: var(--signal); color: var(--ink); border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 700; }
+.go2[hidden], .quiz[hidden], .final[hidden] { display: none; }
+.big { font-family: var(--display); font-weight: 800; font-size: 3.2rem; line-height: .9; color: var(--signal); }
+.stats { display: flex; gap: 10px; }
+.stat { flex: 1; background: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 12px; min-width: 0; }
+.stat span { display: block; font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); }
+.stat b { font-family: var(--display); font-size: 1.5rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ghost { background: none; border: 2px solid #3a4a66; border-radius: 999px; padding: 8px 16px; font-size: .9rem; font-weight: 500; }
+.final, .quiz { display: flex; flex-direction: column; gap: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.on .inner > *, .hint i, .hud.pop, .trace li { animation: none !important; }
+}
+@media (max-height: 680px) {
+  h1 { font-size: 1.85rem; } h2 { font-size: 1.65rem; } .inner { gap: 11px; }
+}
+</style>
+
+<style>html,body{margin:0;padding:0}.stage{height:100vh;height:100dvh}</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-label="Missão MCP">
+  <div class="bars" id="bars" aria-hidden="true"></div>
+  <div class="hud" id="hud" aria-live="polite">★ <span id="pts">0</span> pts</div>
+
+  <!-- 1 · missão -->
+  <section class="slide s-ink on" data-tone="dark">
+    <div class="inner">
+      <p class="label">Parte 1 · Perceber o MCP</p>
+      <h1>Missão: perceber como a IA vai trabalhar <span class="hl">dentro dos nossos sistemas.</span></h1>
+      <ul class="mission">
+        <li><span class="box"></span>Perceber como o MCP funciona</li>
+        <li><span class="box"></span>Saber o que um sistema precisa de ter</li>
+        <li><span class="box"></span>Descobrir se o nosso está pronto</li>
+      </ul>
+      <p class="lead">Três minutos, com toques, pontos e um quiz no fim.</p>
+      <p class="hint"><i></i> Toque para começar</p>
+    </div>
+  </section>
+
+  <!-- 2 · restaurante -->
+  <section class="slide s-ink2" data-tone="dark">
+    <div class="inner">
+      <p class="label">Como funciona</p>
+      <h2>O MCP é como um <span class="hl">empregado de mesa.</span></h2>
+      <p class="pipe"><b>IA</b> → <b>menu</b> → <b>MCP</b> → <b>sistema</b></p>
+      <div class="rrows" id="rrows">
+        <button class="rrow" type="button" aria-expanded="false"><span class="role">Cliente</span><span class="q">Quem faz de cliente?</span><span class="a" hidden><b>A IA.</b> Faz pedidos, mas não vai à cozinha.</span></button>
+        <button class="rrow" type="button" aria-expanded="false"><span class="role">Menu</span><span class="q">O que é o menu?</span><span class="a" hidden><b>As funções disponíveis:</b> criar Folha de Obra, listar pendentes… Só se pede o que está no menu.</span></button>
+        <button class="rrow" type="button" aria-expanded="false"><span class="role">Empregado</span><span class="q">Quem é o empregado?</span><span class="a" hidden><b>O servidor MCP.</b> Leva o pedido à cozinha e traz o resultado.</span></button>
+        <button class="rrow" type="button" aria-expanded="false"><span class="role">Cozinha</span><span class="q">E a cozinha?</span><span class="a" hidden><b>O nosso sistema.</b> Tem os dados e as regras. O cliente nunca entra.</span></button>
+      </div>
+      <p class="found" id="found">Descobertas 0/4</p>
+    </div>
+  </section>
+
+  <!-- 3 · demonstração -->
+  <section class="slide s-concrete" data-tone="light">
+    <div class="inner">
+      <p class="label">Veja acontecer</p>
+      <h2>Faça um pedido <span class="hl">à IA.</span></h2>
+      <div class="chips" id="chips"></div>
+      <div class="demo" id="demo" aria-live="polite"></div>
+      <p class="note">Exemplos ilustrativos, sem dados reais.</p>
+    </div>
+  </section>
+
+  <!-- 4 · requisitos -->
+  <section class="slide s-ink" data-tone="dark">
+    <div class="inner">
+      <p class="label">O que o sistema precisa</p>
+      <h2>Seis peças para <span class="hl">falar com a IA.</span></h2>
+      <div class="grp">
+        <span class="pill base">A base · o sistema já deve ter</span>
+        <ul class="reqs">
+          <li><strong>Porta de entrada (API)</strong><span>Outros programas podem fazer pedidos ao sistema. Sem isto, a IA não entra.</span></li>
+          <li><strong>Dados organizados</strong><span>Equipamentos, clientes e Folhas de Obra identificados e ligados entre si.</span></li>
+          <li><strong>Permissões por utilizador</strong><span>Cada pedido tem uma pessoa por trás, com o seu nível de acesso.</span></li>
+        </ul>
+      </div>
+      <div class="grp">
+        <span class="pill mcp">A camada MCP · é preciso construir</span>
+        <ul class="reqs">
+          <li><strong>Menu de funções</strong><span>A lista do que a IA pode pedir: consultar, criar, atualizar.</span></li>
+          <li><strong>Servidor MCP</strong><span>Mostra o menu à IA e leva os pedidos ao sistema. Faz-se uma vez.</span></li>
+          <li><strong>Registo e confirmação</strong><span>Tudo fica registado. Ações que alteram dados pedem um OK humano.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · diagnóstico -->
+  <section class="slide s-sun" data-tone="light">
+    <div class="inner">
+      <p class="label">Desafio</p>
+      <h2>O nosso sistema <span class="hl">está pronto?</span></h2>
+      <div class="diag" id="diag"></div>
+      <div>
+        <div class="mline"><span>Prontidão</span><span id="mtxt">0/6</span></div>
+        <div class="meter" style="margin-top:6px"><i id="mfill"></i></div>
+      </div>
+      <p class="verdict" id="verdict">Responda com sinceridade, linha a linha.</p>
+    </div>
+  </section>
+
+  <!-- 6 · cuidados -->
+  <section class="slide s-signal" data-tone="light">
+    <div class="inner">
+      <p class="label">Cuidados</p>
+      <h2>Antes de ligar, <span class="hl">três cuidados.</span></h2>
+      <ul class="cares">
+        <li><strong>A IA pode enganar-se.</strong><span>Por isso, tudo o que altera dados passa por confirmação humana.</span></li>
+        <li><strong>O que a IA lê passa pela conversa.</strong><span>É preciso decidir que dados se expõem, sobretudo os dos clientes.</span></li>
+        <li><strong>Cada função é trabalho.</strong><span>Começar com um menu pequeno, bem testado, e crescer devagar.</span></li>
+      </ul>
+      <p class="warn"><b>O MCP não é segurança por si só.</b> Permissões e separação de dados têm de ser desenhadas no sistema.</p>
+    </div>
+  </section>
+
+  <!-- 7 · quiz -->
+  <section class="slide s-ink2" data-tone="dark">
+    <div class="inner">
+      <div class="quiz" id="quiz">
+        <p class="label" id="qlabel">Quiz relâmpago · 1/3</p>
+        <p class="qtext" id="qtext"></p>
+        <div class="opts" id="opts"></div>
+        <p class="fb" id="fb"></p>
+        <div class="qfoot"><button class="go2" id="next" type="button" hidden>Seguinte</button></div>
+      </div>
+      <div class="final" id="final" hidden>
+        <p class="label">Missão cumprida</p>
+        <h2 id="rank">Mestre do MCP</h2>
+        <ul class="mission">
+          <li><span class="box ok"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span>Perceber como o MCP funciona</li>
+          <li><span class="box ok"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span>Saber o que um sistema precisa de ter</li>
+          <li><span class="box ok"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span>Descobrir se o nosso está pronto</li>
+        </ul>
+        <div class="stats">
+          <div class="stat"><span>Quiz</span><b id="qscore">0/3</b></div>
+          <div class="stat"><span>Pontos</span><b id="tscore">0</b></div>
+        </div>
+        <div class="qfoot" style="justify-content:flex-start;flex-wrap:wrap">
+          <button class="ghost" id="retry" type="button">Repetir o quiz</button>
+          <button class="ghost" id="restart" type="button">Ver desde o início</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
+  var barsEl = document.getElementById('bars');
+  var hud = document.getElementById('hud'), ptsEl = document.getElementById('pts');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = 0, bars = [], score = 0, awarded = {};
+  var CHECK = '<svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+
+  slides.forEach(function () { var b = document.createElement('div'); b.className = 'bar'; barsEl.appendChild(b); bars.push(b); });
+
+  function add(key, n) {
+    if (awarded[key]) return;
+    awarded[key] = true; score += n; ptsEl.textContent = score;
+    hud.classList.remove('pop'); void hud.offsetWidth; hud.classList.add('pop');
+  }
+  function go(n) {
+    cur = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('on', k === cur); });
+    bars.forEach(function (b, k) { b.classList.toggle('done', k <= cur); });
+    stage.classList.toggle('tone-light', slides[cur].getAttribute('data-tone') === 'light');
+    slides[cur].scrollTop = 0;
+  }
+  go(0);
+
+  var swiped = false, sx = 0, sy = 0;
+  stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      swiped = true; setTimeout(function () { swiped = false; }, 400);
+      go(cur + (dx < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+  stage.addEventListener('click', function (e) {
+    if (swiped || e.target.closest('button, a')) return;
+    var r = stage.getBoundingClientRect();
+    go(cur + ((e.clientX - r.left) < r.width * 0.3 ? -1 : 1));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+
+  /* 2 · restaurante */
+  var rrows = Array.prototype.slice.call(document.querySelectorAll('#rrows .rrow')), found = document.getElementById('found');
+  rrows.forEach(function (r, k) {
+    r.addEventListener('click', function () {
+      r.setAttribute('aria-expanded', 'true');
+      r.querySelector('.a').hidden = false;
+      add('r' + k, 5);
+      var n = rrows.filter(function (x) { return x.getAttribute('aria-expanded') === 'true'; }).length;
+      found.textContent = 'Descobertas ' + n + '/4' + (n === 4 ? ' · o cliente nunca entra na cozinha' : '');
+    });
+  });
+
+  /* 3 · demonstração */
+  var items = [
+    { s: 'Criar Folha de Obra', q: 'Cria uma Folha de Obra para esta máquina.', fn: 'criar_folha_de_obra', write: true, ok: 'Folha de Obra criada em rascunho, com equipamento e cliente preenchidos.' },
+    { s: 'Trabalhos urgentes', q: 'Que trabalhos urgentes estão pendentes?', fn: 'listar_trabalhos_urgentes', ok: '3 trabalhos urgentes em aberto, por ordem de prazo:', list: ['Grua articulada · inspeção · hoje', 'Plataforma elevatória · travões · amanhã', 'Cesto · fuga hidráulica · 2 dias'] },
+    { s: 'Estado da proposta', q: 'Qual é o estado desta proposta?', fn: 'consultar_proposta', ok: 'Proposta enviada ao cliente, a aguardar aprovação.' },
+    { s: 'Ficha do equipamento', q: 'Abre a ficha deste equipamento.', fn: 'abrir_ficha_equipamento', ok: 'Ficha aberta: histórico de intervenções, peças e próxima manutenção.' }
+  ];
+  var chipsEl = document.getElementById('chips'), demo = document.getElementById('demo'), run = 0, timers = [];
+
+  function mk(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; return e; }
+  function resultBubble(it, text) {
+    var ai = mk('div', 'b ai'), p = mk('div', 'res');
+    p.appendChild(document.createTextNode(text || it.ok));
+    if (!text && it.list) { var ul = document.createElement('ul'); it.list.forEach(function (t) { ul.appendChild(mk('li', '', t)); }); p.appendChild(ul); }
+    ai.appendChild(p); return ai;
+  }
+  function show(k, instant) {
+    var id = ++run, it = items[k];
+    timers.forEach(clearTimeout); timers = [];
+    Array.prototype.forEach.call(chipsEl.children, function (c, j) { c.setAttribute('aria-pressed', j === k ? 'true' : 'false'); });
+    demo.textContent = '';
+    demo.appendChild(mk('div', 'b user', it.q));
+    var tr = mk('ol', 'trace'); demo.appendChild(tr);
+    var steps = [
+      function (li) { li.appendChild(mk('span', '', 'A IA lê o menu de funções.')); },
+      function (li) { li.appendChild(mk('span', '', 'Escolhe a função ')); li.lastChild.appendChild(mk('span', 'fn', it.fn)); },
+      function (li) { li.appendChild(mk('span', '', 'O MCP confirma as permissões e pede ao sistema.')); },
+      function (li) { li.appendChild(mk('span', '', it.write ? 'Antes de gravar, pede confirmação a uma pessoa.' : 'O resultado volta à conversa.')); if (it.write) li.className = 'ask'; }
+    ];
+    function done() {
+      if (id !== run) return;
+      if (it.write) {
+        var row = mk('div', 'row2'), ok = mk('button', 'btn go', 'Confirmar'), no = mk('button', 'btn', 'Cancelar');
+        ok.type = 'button'; no.type = 'button';
+        ok.addEventListener('click', function () { row.remove(); demo.appendChild(resultBubble(it)); });
+        no.addEventListener('click', function () { row.remove(); demo.appendChild(resultBubble(it, 'Cancelado. Nada foi gravado.')); });
+        row.appendChild(ok); row.appendChild(no); demo.appendChild(row);
+      } else { demo.appendChild(resultBubble(it)); }
+    }
+    function addStep(i) {
+      if (id !== run) return;
+      var li = document.createElement('li'), dot = mk('span', 'dot'); dot.innerHTML = CHECK;
+      if (instant) li.style.animation = 'none';
+      li.appendChild(dot); var wrap = document.createElement('span'); steps[i](wrap); while (wrap.firstChild) li.appendChild(wrap.firstChild);
+      if (steps[i] === steps[3] && it.write) li.className = 'ask';
+      tr.appendChild(li);
+      if (i < 3) { if (instant || reduce) addStep(i + 1); else timers.push(setTimeout(function () { addStep(i + 1); }, 520)); }
+      else { if (instant || reduce) done(); else timers.push(setTimeout(done, 450)); }
+    }
+    addStep(0);
+  }
+  items.forEach(function (it, k) {
+    var b = mk('button', 'chip', it.s); b.type = 'button';
+    b.addEventListener('click', function () { show(k, false); add('d' + k, 5); });
+    chipsEl.appendChild(b);
+  });
+  show(1, true);
+
+  /* 5 · diagnóstico */
+  var dnames = ['Porta de entrada (API)', 'Dados organizados', 'Permissões por utilizador', 'Menu de funções', 'Servidor MCP', 'Registo e confirmação'];
+  var dstate = [null, null, null, null, null, null];
+  var diag = document.getElementById('diag'), mtxt = document.getElementById('mtxt'), mfill = document.getElementById('mfill'), verdict = document.getElementById('verdict');
+  function updDiag() {
+    var ans = dstate.filter(function (v) { return v !== null; }).length, yes = dstate.filter(function (v) { return v === 1; }).length;
+    mtxt.textContent = yes + '/6'; mfill.style.width = (yes / 6 * 100) + '%';
+    if (ans < 6) { verdict.textContent = ans === 0 ? 'Responda com sinceridade, linha a linha.' : 'Faltam ' + (6 - ans) + ' respostas.'; return; }
+    var baseMiss = [0, 1, 2].filter(function (i) { return dstate[i] === 0; }).length;
+    var layerMiss = [3, 4, 5].filter(function (i) { return dstate[i] === 0; }).length;
+    var html;
+    if (baseMiss > 0) html = '<b>Primeiro a base.</b> Faltam ' + baseMiss + ' de 3 peças que o próprio sistema deve ter. Só depois vale a pena construir a camada MCP.';
+    else if (layerMiss > 0) html = '<b>A base está pronta.</b> Falta a camada MCP: menu, servidor e registo. É aqui que o trabalho começa.';
+    else html = '<b>Tudo pronto.</b> Comece por uma função de consulta, valide, e só depois passe às que alteram dados.';
+    verdict.innerHTML = html;
+    add('diag', 10);
+  }
+  dnames.forEach(function (n, i) {
+    var row = mk('div', 'drow'), t = mk('strong', '', n), yn = mk('div', 'yn');
+    [['1', 'Sim'], ['0', 'Não']].forEach(function (p) {
+      var b = mk('button', '', p[1]); b.type = 'button'; b.setAttribute('data-v', p[0]); b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        dstate[i] = +p[0];
+        Array.prototype.forEach.call(yn.children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        updDiag();
+      });
+      yn.appendChild(b);
+    });
+    row.appendChild(t); row.appendChild(yn); diag.appendChild(row);
+  });
+
+  /* 7 · quiz */
+  var qs = [
+    { q: 'O que faz o servidor MCP?', o: ['Substitui o nosso sistema', 'Mostra à IA o que pode pedir e leva os pedidos ao sistema', 'Guarda uma cópia de todos os dados'], c: 1, e: 'É o empregado de mesa: o sistema continua a ser a cozinha.' },
+    { q: 'A IA quer criar uma Folha de Obra. O que deve acontecer antes de gravar?', o: ['Gravar logo, para ganhar tempo', 'Pedir confirmação a uma pessoa', 'Nada, a IA nunca se engana'], c: 1, e: 'Ações que alteram dados pedem sempre um OK humano.' },
+    { q: 'A que pode a IA aceder através do MCP?', o: ['A tudo o que existir no sistema', 'Só às funções do menu e ao que o utilizador pode ver', 'A tudo o que quiser, por defeito'], c: 1, e: 'O menu e as permissões definem os limites, não a IA.' }
+  ];
+  var qi = 0, qpts = 0;
+  var quiz = document.getElementById('quiz'), fin = document.getElementById('final'), qlabel = document.getElementById('qlabel'), qtext = document.getElementById('qtext'),
+      opts = document.getElementById('opts'), fb = document.getElementById('fb'), nextB = document.getElementById('next');
+  function renderQ() {
+    var q = qs[qi]; qlabel.textContent = 'Quiz relâmpago · ' + (qi + 1) + '/3'; qtext.textContent = q.q;
+    opts.textContent = ''; fb.textContent = ''; nextB.hidden = true; nextB.textContent = qi === 2 ? 'Ver resultado' : 'Seguinte';
+    q.o.forEach(function (t, j) {
+      var b = mk('button', 'opt', t); b.type = 'button';
+      b.addEventListener('click', function () {
+        Array.prototype.forEach.call(opts.children, function (x, m) { x.disabled = true; if (m === q.c) x.classList.add('right'); });
+        if (j === q.c) { qpts++; add('q' + qi, 20); fb.innerHTML = '<b>Certo.</b> ' + q.e; }
+        else { b.classList.add('wrong'); fb.innerHTML = '<b>Quase.</b> ' + q.e; }
+        nextB.hidden = false;
+      });
+      opts.appendChild(b);
+    });
+  }
+  function ranking() {
+    var r = score >= 100 ? 'Mestre do MCP' : score >= 70 ? 'Quase mestre do MCP' : 'Aprendiz de MCP';
+    document.getElementById('rank').textContent = r;
+    document.getElementById('qscore').textContent = qpts + '/3';
+    document.getElementById('tscore').textContent = score;
+  }
+  nextB.addEventListener('click', function () {
+    if (qi < 2) { qi++; renderQ(); } else { quiz.hidden = true; fin.hidden = false; ranking(); }
+  });
+  document.getElementById('retry').addEventListener('click', function () { qi = 0; qpts = 0; fin.hidden = true; quiz.hidden = false; renderQ(); });
+  document.getElementById('restart').addEventListener('click', function () { go(0); });
+  renderQ();
+})();
+</script>
+
+</body>
+</html>

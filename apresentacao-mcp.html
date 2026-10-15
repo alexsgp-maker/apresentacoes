@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101826">
+<meta property="og:title" content="MCP em 2 minutos">
+<meta property="og:description" content="O que é o MCP, em 8 ecrãs rápidos.">
+<meta property="og:type" content="website">
+<title>MCP em 2 minutos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: stories em ecrã inteiro, um slide por vez, toque à direita avança, à esquerda recua.
+   Cada slide tem o seu fundo (tinta, laranja de máquina, betão, amarelo de sinalização). */
+:root {
+  --ink: #101826;
+  --ink-2: #1a2539;
+  --signal: #ff6b1a;
+  --sun: #ffc93c;
+  --sky: #5cc8ff;
+  --mint: #6ee7a8;
+  --pink: #ff8fb1;
+  --paper: #f3f5f7;
+  --concrete: #e4e9ee;
+  --mute-dark: #a9b6c8;
+  --mute-light: #44526a;
+  --display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gut: 22px;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+.stage {
+  position: relative;
+  height: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* barras de progresso */
+.bars {
+  position: absolute; z-index: 5;
+  top: 12px;
+  left: max(var(--gut), env(safe-area-inset-left, 0px));
+  right: max(var(--gut), env(safe-area-inset-right, 0px));
+  display: flex; gap: 4px;
+  pointer-events: none;
+}
+.bar { flex: 1; height: 3px; border-radius: 2px; background: rgba(243,245,247,.28); transition: background .25s; }
+.bar.done { background: var(--paper); }
+.stage.tone-light .bar { background: rgba(16,24,38,.22); }
+.stage.tone-light .bar.done { background: var(--ink); }
+
+/* slides */
+.slide {
+  --sbg: var(--ink); --sfg: var(--paper); --smute: var(--mute-dark); --sacc: var(--signal);
+  position: absolute; inset: 0;
+  display: none; flex-direction: column;
+  padding-top: 40px; padding-bottom: 24px;
+  padding-left: max(var(--gut), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gut), env(safe-area-inset-right, 0px));
+  background: var(--sbg); color: var(--sfg);
+  overflow-y: auto; overflow-x: hidden;
+}
+.slide.on { display: flex; }
+.s-ink2 { --sbg: var(--ink-2); }
+.s-signal { --sbg: var(--signal); --sfg: var(--ink); --smute: #4a1d05; --sacc: var(--ink); }
+.s-concrete { --sbg: var(--concrete); --sfg: var(--ink); --smute: var(--mute-light); --sacc: var(--signal); }
+.s-sun { --sbg: var(--sun); --sfg: var(--ink); --smute: #3b2f06; --sacc: var(--ink); }
+
+.inner { margin-block: auto; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.slide.on .inner > * { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+.slide.on .inner > *:nth-child(2) { animation-delay: .06s; }
+.slide.on .inner > *:nth-child(3) { animation-delay: .12s; }
+.slide.on .inner > *:nth-child(4) { animation-delay: .18s; }
+.slide.on .inner > *:nth-child(5) { animation-delay: .24s; }
+.slide.on .inner > *:nth-child(6) { animation-delay: .3s; }
+@keyframes rise { from { opacity: .15; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.label {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--smute); margin: 0;
+}
+h1, h2 {
+  font-family: var(--display); font-weight: 800; letter-spacing: -.025em;
+  line-height: 1.02; margin: 0; text-wrap: balance;
+}
+h1 { font-size: clamp(2.1rem, 9.4vw, 2.9rem); }
+h2 { font-size: clamp(1.9rem, 8.4vw, 2.5rem); }
+.hl { color: var(--sacc); }
+.s-ink .hl, .s-ink2 .hl { color: var(--signal); }
+p { margin: 0; }
+.lead { font-size: 1.08rem; color: var(--smute); max-width: 34ch; }
+.lead b { color: var(--sfg); font-weight: 700; }
+.cap { font-family: var(--display); font-weight: 600; font-size: 1.05rem; text-align: right; color: var(--smute); }
+.hint {
+  font-family: var(--mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--smute); display: flex; align-items: center; gap: 10px; margin-top: 6px;
+}
+.hint i { width: 8px; height: 8px; border-radius: 50%; background: var(--signal); animation: pulse 1.4s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.7); opacity: .45; } }
+
+/* slide 1: conversa */
+.chat { display: flex; flex-direction: column; gap: 10px; }
+.b { padding: 12px 16px; border-radius: 18px; max-width: 88%; font-size: 1rem; }
+.b.user { align-self: flex-end; background: var(--signal); color: var(--ink); border-bottom-right-radius: 5px; font-weight: 500; }
+.b.ai { align-self: flex-start; background: var(--ink-2); border: 1px solid #2c3a54; border-bottom-left-radius: 5px; }
+.s-concrete .b.ai { background: #fff; border: 1px solid #c4ccd6; color: var(--ink); }
+.s-concrete .b.user { background: var(--ink); color: var(--paper); }
+
+/* svg */
+.fig { width: 100%; height: auto; display: block; max-height: 36vh; }
+.fig text { font-family: var(--body); font-weight: 700; }
+.wire { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 7 7; animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+.wire.solid { stroke-dasharray: none; animation: none; }
+
+/* slide 4: passos */
+.flow { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; position: relative; }
+.flow::before { content: ""; position: absolute; left: 21px; top: 22px; bottom: 22px; width: 2px; background: #33425c; }
+.flow li { display: flex; gap: 16px; align-items: center; position: relative; }
+.flow .n {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 800; font-size: 1.2rem; color: var(--ink);
+}
+.flow li:nth-child(1) .n { background: var(--sky); }
+.flow li:nth-child(2) .n { background: var(--sun); }
+.flow li:nth-child(3) .n { background: var(--mint); }
+.flow strong { display: block; font-family: var(--display); font-size: 1.2rem; line-height: 1.15; }
+.flow span { color: var(--mute-dark); font-size: .95rem; }
+.tech {
+  font-family: var(--mono); font-size: .72rem; line-height: 1.5; color: var(--mute-dark);
+  border: 1px dashed #3a4a66; border-radius: 10px; padding: 10px 12px;
+}
+.tech b { color: var(--sky); font-weight: 500; }
+
+/* slide 5: demonstração */
+.chips { display: flex; flex-direction: column; gap: 8px; }
+.chip {
+  text-align: left; background: #fff; border: 2px solid var(--ink); border-radius: 12px;
+  padding: 11px 14px; font-weight: 500; font-size: .98rem; line-height: 1.3; color: var(--ink);
+  transition: transform .12s, background .12s;
+}
+.chip:active { transform: scale(.98); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.demo { min-height: 150px; display: flex; flex-direction: column; gap: 8px; }
+.res { font-size: .95rem; line-height: 1.4; }
+.res ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.res li { padding: 7px 10px; background: #eef1f5; border-radius: 8px; font-size: .9rem; }
+.res li em { font-style: normal; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: #b44a0a; display: block; }
+.dots { display: inline-flex; gap: 4px; padding: 4px 0; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--mute-light); animation: bob 1s infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; }
+.dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes bob { 0%,100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-4px); opacity: 1; } }
+.note { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mute-light); }
+
+/* slide 6: controlo */
+.rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.rules li { display: flex; gap: 14px; align-items: flex-start; }
+.tick { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--mint); display: grid; place-items: center; margin-top: 2px; }
+.tick svg { width: 16px; height: 16px; }
+.rules strong { display: block; font-family: var(--display); font-size: 1.15rem; line-height: 1.2; }
+.rules span { color: var(--mute-dark); font-size: .93rem; }
+.warn { background: var(--sun); color: var(--ink); border-radius: 14px; padding: 14px 16px; font-weight: 500; font-size: .95rem; }
+.warn b { font-weight: 700; }
+
+/* slide 7: escada */
+.stairs { display: flex; flex-direction: column; gap: 8px; }
+.step {
+  margin-left: calc(var(--k) * 7%);
+  background: var(--ink); color: var(--paper); border-radius: 12px; padding: 11px 14px;
+  display: flex; flex-direction: column; gap: 1px;
+}
+.step:last-child { background: var(--signal); color: var(--ink); }
+.step strong { font-family: var(--display); font-size: 1.2rem; line-height: 1.1; }
+.step span { font-size: .88rem; opacity: .85; }
+.key { font-family: var(--display); font-weight: 800; font-size: clamp(1.5rem, 6.6vw, 1.9rem); line-height: 1.08; letter-spacing: -.02em; }
+
+/* slide 8: votação */
+.scale { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.num {
+  aspect-ratio: 1 / 1; min-width: 0; border-radius: 12px; border: 2px solid #3a4a66; background: var(--ink-2);
+  font-family: var(--display); font-weight: 800; font-size: 1.3rem; transition: transform .12s, background .12s, border-color .12s;
+}
+.num:active { transform: scale(.94); }
+.num[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); color: var(--ink); }
+.ends { display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mute-dark); }
+.vote-res { display: flex; flex-direction: column; gap: 14px; }
+.vote-res[hidden] { display: none; }
+.big { font-family: var(--display); font-weight: 800; font-size: 3.4rem; line-height: .9; color: var(--signal); }
+.reveal {
+  background: var(--paper); color: var(--ink); border-radius: 16px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+  animation: rise .6s 1.3s cubic-bezier(.2,.7,.2,1) both;
+}
+.reveal strong { font-family: var(--display); font-size: 1.35rem; line-height: 1.12; }
+.reveal span { font-size: .95rem; }
+.ghost {
+  align-self: flex-start; background: none; border: 2px solid #3a4a66; border-radius: 999px;
+  padding: 8px 16px; font-size: .9rem; font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.on .inner > *, .reveal, .wire, .hint i, .dots i { animation: none !important; }
+}
+@media (max-height: 640px) {
+  h1 { font-size: 1.9rem; } h2 { font-size: 1.7rem; }
+  .inner { gap: 12px; } .fig { max-height: 26vh; }
+}
+</style>
+
+<style>html,body{margin:0;padding:0}.stage{height:100vh;height:100dvh}</style>
+</head>
+<body>
+<main class="stage" id="stage" aria-label="Apresentação sobre MCP">
+  <div class="bars" id="bars" aria-hidden="true"></div>
+
+  <!-- 1 · gancho -->
+  <section class="slide s-ink on" data-tone="dark">
+    <div class="inner">
+      <p class="label">MCP · leitura de 2 minutos</p>
+      <h1>A IA escreve um relatório em segundos. <span class="hl">Mas não abre uma Folha de Obra.</span></h1>
+      <div class="chat" aria-label="Exemplo de conversa">
+        <div class="b user">Abre a Folha de Obra desta grua.</div>
+        <div class="b ai">Não tenho acesso a esse sistema. Posso ajudar a escrever um texto sobre ela.</div>
+      </div>
+      <p class="lead">Porquê? E o que muda com o <b>MCP</b>?</p>
+      <p class="hint"><i></i> Toque para continuar</p>
+    </div>
+  </section>
+
+  <!-- 2 · problema -->
+  <section class="slide s-ink2" data-tone="dark">
+    <div class="inner">
+      <p class="label">O problema</p>
+      <h2>Hoje, cada sistema fala <span class="hl">uma língua diferente.</span></h2>
+      <svg class="fig" viewBox="0 0 320 210" role="img" aria-label="Uma IA ligada por quatro cabos diferentes e cruzados a quatro sistemas">
+        <path class="wire" stroke="#ff6b1a" d="M80 100 C 140 10, 170 120, 224 133"/>
+        <path class="wire" stroke="#ffc93c" d="M80 105 C 150 200, 150 2, 224 25"/>
+        <path class="wire" stroke="#ff8fb1" d="M80 110 C 120 180, 190 60, 224 187"/>
+        <path class="wire" stroke="#6ee7a8" d="M80 112 C 160 120, 120 30, 224 79"/>
+        <rect x="8" y="82" width="72" height="46" rx="12" fill="#5cc8ff"/>
+        <text x="44" y="111" text-anchor="middle" font-size="16" fill="#101826">IA</text>
+        <g fill="#101826" stroke="#3a4a66" stroke-width="1.5">
+          <rect x="224" y="8" width="90" height="34" rx="9"/><rect x="224" y="62" width="90" height="34" rx="9"/>
+          <rect x="224" y="116" width="90" height="34" rx="9"/><rect x="224" y="170" width="90" height="34" rx="9"/>
+        </g>
+        <g fill="#f3f5f7" font-size="11.5" text-anchor="middle">
+          <text x="269" y="29">ERP</text><text x="269" y="83">Excel</text>
+          <text x="269" y="137">SharePoint</text><text x="269" y="191">Base de dados</text>
+        </g>
+      </svg>
+      <p class="lead">Cada ligação é feita à medida: <b>mais tempo, mais código, mais manutenção.</b></p>
+      <p class="cap">Quatro sistemas, quatro cabos.</p>
+    </div>
+  </section>
+
+  <!-- 3 · solução -->
+  <section class="slide s-signal" data-tone="light">
+    <div class="inner">
+      <p class="label">A solução</p>
+      <h2>MCP: a porta USB universal <span class="hl">da IA.</span></h2>
+      <svg class="fig" viewBox="0 0 320 210" role="img" aria-label="Uma IA ligada a um conector MCP central, que liga a quatro sistemas">
+        <path class="wire solid" stroke="#101826" stroke-width="5" d="M80 105 L 104 105"/>
+        <path class="wire solid" stroke="#101826" d="M158 105 C 192 105, 190 25, 224 25"/>
+        <path class="wire solid" stroke="#101826" d="M158 105 C 192 105, 190 79, 224 79"/>
+        <path class="wire solid" stroke="#101826" d="M158 105 C 192 105, 190 133, 224 133"/>
+        <path class="wire solid" stroke="#101826" d="M158 105 C 192 105, 190 187, 224 187"/>
+        <rect x="8" y="82" width="72" height="46" rx="12" fill="#f3f5f7"/>
+        <text x="44" y="111" text-anchor="middle" font-size="16" fill="#101826">IA</text>
+        <circle cx="131" cy="105" r="28" fill="#101826"/>
+        <text x="131" y="110" text-anchor="middle" font-size="14" fill="#ffc93c">MCP</text>
+        <g fill="#101826">
+          <rect x="224" y="8" width="90" height="34" rx="9"/><rect x="224" y="62" width="90" height="34" rx="9"/>
+          <rect x="224" y="116" width="90" height="34" rx="9"/><rect x="224" y="170" width="90" height="34" rx="9"/>
+        </g>
+        <g fill="#f3f5f7" font-size="11.5" text-anchor="middle">
+          <text x="269" y="29">ERP</text><text x="269" y="83">Excel</text>
+          <text x="269" y="137">SharePoint</text><text x="269" y="191">Base de dados</text>
+        </g>
+      </svg>
+      <p class="lead">Um protocolo aberto com <b>a mesma ligação para tudo</b>. O sistema liga-se uma vez e qualquer IA compatível pode usá-lo.</p>
+      <p class="cap">Uma só ligação. Várias possibilidades.</p>
+    </div>
+  </section>
+
+  <!-- 4 · como funciona -->
+  <section class="slide s-ink" data-tone="dark">
+    <div class="inner">
+      <p class="label">Como funciona</p>
+      <h2>Três passos. <span class="hl">Só isso.</span></h2>
+      <ol class="flow">
+        <li><span class="n">1</span><div><strong>A IA percebe o pedido</strong><span>Entende o que a pessoa precisa.</span></div></li>
+        <li><span class="n">2</span><div><strong>O MCP liga ao sistema certo</strong><span>Encontra a função adequada.</span></div></li>
+        <li><span class="n">3</span><div><strong>O sistema executa e responde</strong><span>O resultado volta à conversa.</span></div></li>
+      </ol>
+      <p class="tech"><b>Para os técnicos:</b> o servidor MCP expõe <b>tools</b> com nome e parâmetros definidos. A IA chama a tool e recebe o resultado.</p>
+    </div>
+  </section>
+
+  <!-- 5 · demonstração -->
+  <section class="slide s-concrete" data-tone="light">
+    <div class="inner">
+      <p class="label">Na prática, na nossa oficina</p>
+      <h2>Toque num pedido e veja <span class="hl">a resposta.</span></h2>
+      <div class="chips" id="chips"></div>
+      <div class="demo" id="demo" aria-live="polite"></div>
+      <p class="note">Exemplos ilustrativos, sem dados reais.</p>
+    </div>
+  </section>
+
+  <!-- 6 · controlo -->
+  <section class="slide s-ink2" data-tone="dark">
+    <div class="inner">
+      <p class="label">Segurança</p>
+      <h2>Ligar não é <span class="hl">dar acesso a tudo.</span></h2>
+      <ul class="rules">
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span><div><strong>Só as funções definidas</strong><span>A IA usa apenas o que for disponibilizado.</span></div></li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span><div><strong>Autenticação e permissões</strong><span>Cada utilizador vê o que lhe compete.</span></div></li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span><div><strong>Dados certos para cada cliente</strong><span>Informação separada por cliente.</span></div></li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" stroke="#101826" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span><div><strong>Registo e confirmação</strong><span>Ações críticas ficam registadas e pedem confirmação.</span></div></li>
+      </ul>
+      <p class="warn"><b>O MCP não é segurança por si só.</b> Permissões e isolamento de dados têm de ser implementados.</p>
+    </div>
+  </section>
+
+  <!-- 7 · começar pequeno -->
+  <section class="slide s-sun" data-tone="light">
+    <div class="inner">
+      <p class="label">Como começar</p>
+      <h2>Começar pequeno. <span class="hl">Escalar depois.</span></h2>
+      <div class="stairs">
+        <div class="step" style="--k:0"><strong>Preparar</strong><span>Escolher o processo com mais valor.</span></div>
+        <div class="step" style="--k:1"><strong>Integrar</strong><span>Disponibilizar via servidor MCP.</span></div>
+        <div class="step" style="--k:2"><strong>Validar</strong><span>Testar segurança, fiabilidade e utilidade.</span></div>
+        <div class="step" style="--k:3"><strong>Expandir</strong><span>Mais funções, mais casos de uso.</span></div>
+      </div>
+      <p class="key">Desenvolver uma vez. Reutilizar sempre que possível.</p>
+    </div>
+  </section>
+
+  <!-- 8 · votação -->
+  <section class="slide s-ink" data-tone="dark" id="last">
+    <div class="inner">
+      <p class="label">Última pergunta</p>
+      <h2>De 0 a 10, indicaria esta apresentação <span class="hl">a um amigo?</span></h2>
+      <div id="vote">
+        <div class="scale" id="scale"></div>
+        <div class="ends" style="margin-top:10px"><span>Nada provável</span><span>Muito provável</span></div>
+      </div>
+      <div class="vote-res" id="voteRes" hidden>
+        <div class="big" id="bigNum">0</div>
+        <p class="lead" id="reaction"></p>
+        <div class="reveal">
+          <strong>Afinal era só uma simulação.</strong>
+          <span>Nenhum voto foi guardado. Mas pode mesmo enviar o link a um amigo.</span>
+        </div>
+        <button class="ghost" id="again" type="button">Votar outra vez</button>
+        <button class="ghost" id="restart" type="button">Ver desde o início</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
+  var barsEl = document.getElementById('bars');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = 0, bars = [];
+
+  slides.forEach(function () {
+    var b = document.createElement('div'); b.className = 'bar'; barsEl.appendChild(b); bars.push(b);
+  });
+
+  function go(n) {
+    cur = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('on', k === cur); });
+    bars.forEach(function (b, k) { b.classList.toggle('done', k <= cur); });
+    stage.classList.toggle('tone-light', slides[cur].getAttribute('data-tone') === 'light');
+    slides[cur].scrollTop = 0;
+  }
+  go(0);
+
+  var swiped = false, sx = 0, sy = 0;
+  stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      swiped = true; setTimeout(function () { swiped = false; }, 400);
+      go(cur + (dx < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+  stage.addEventListener('click', function (e) {
+    if (swiped || e.target.closest('button, a')) return;
+    var r = stage.getBoundingClientRect();
+    go(cur + ((e.clientX - r.left) < r.width * 0.3 ? -1 : 1));
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+
+  /* demonstração */
+  var items = [
+    { q: 'Cria uma Folha de Obra para esta máquina', a: 'Folha de Obra criada em rascunho, com equipamento e cliente já preenchidos. Falta só confirmar.' },
+    { q: 'Que trabalhos urgentes estão pendentes?', a: 'Tem 3 trabalhos urgentes em aberto, por ordem de prazo:', list: ['Grua articulada · inspeção · hoje', 'Plataforma elevatória · travões · amanhã', 'Cesto · fuga hidráulica · 2 dias'] },
+    { q: 'Qual é o estado desta proposta?', a: 'Proposta enviada ao cliente, a aguardar aprovação.' },
+    { q: 'Abre a ficha deste equipamento', a: 'Ficha aberta: histórico de intervenções, peças e próxima manutenção.' }
+  ];
+  var chipsEl = document.getElementById('chips'), demo = document.getElementById('demo'), timer = null;
+
+  function show(k) {
+    clearTimeout(timer);
+    Array.prototype.forEach.call(chipsEl.children, function (c, j) { c.setAttribute('aria-pressed', j === k ? 'true' : 'false'); });
+    demo.textContent = '';
+    var u = document.createElement('div'); u.className = 'b user'; u.textContent = items[k].q; demo.appendChild(u);
+    var ai = document.createElement('div'); ai.className = 'b ai'; demo.appendChild(ai);
+    function fill() {
+      ai.textContent = '';
+      var p = document.createElement('div'); p.className = 'res'; p.appendChild(document.createTextNode(items[k].a));
+      if (items[k].list) {
+        var ul = document.createElement('ul');
+        items[k].list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+        p.appendChild(ul);
+      }
+      ai.appendChild(p);
+    }
+    if (reduce) { fill(); return; }
+    var d = document.createElement('span'); d.className = 'dots'; d.innerHTML = '<i></i><i></i><i></i>'; ai.appendChild(d);
+    timer = setTimeout(fill, 650);
+  }
+  items.forEach(function (it, k) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = it.q;
+    b.addEventListener('click', function () { show(k); });
+    chipsEl.appendChild(b);
+  });
+  show(1);
+
+  /* votação simulada */
+  var scale = document.getElementById('scale'), vote = document.getElementById('vote'),
+      res = document.getElementById('voteRes'), big = document.getElementById('bigNum'), reaction = document.getElementById('reaction');
+  function say(n) {
+    if (n >= 9) return 'Promotor! Já deve estar a pensar a quem vai enviar.';
+    if (n >= 7) return 'Simpático, mas sem entusiasmo. Quase lá.';
+    if (n >= 4) return 'Morno. Dava para um café, não para uma recomendação.';
+    return 'Ui. Vamos fingir que isto não aconteceu.';
+  }
+  for (var n = 0; n <= 10; n++) {
+    (function (n) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'num'; b.textContent = n; b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () {
+        big.textContent = n; reaction.textContent = say(n);
+        vote.hidden = true; res.hidden = false;
+        res.querySelector('.reveal').style.animation = 'none';
+        void res.offsetWidth;
+        res.querySelector('.reveal').style.animation = '';
+      });
+      scale.appendChild(b);
+    })(n);
+  }
+  document.getElementById('again').addEventListener('click', function () { res.hidden = true; vote.hidden = false; });
+  document.getElementById('restart').addEventListener('click', function () { res.hidden = true; vote.hidden = false; go(0); });
+})();
+</script>
+
+</body>
+</html>
