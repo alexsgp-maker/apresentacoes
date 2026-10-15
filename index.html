@@ -1,27 +1,92 @@
-﻿<!doctype html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101826">
+<meta property="og:title" content="Apresentações">
+<meta property="og:description" content="IA sem mistério: leituras de 2 minutos, com jogos e quiz.">
+<meta property="og:type" content="website">
 <title>Apresentações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-:root { color-scheme: dark; }
-body { margin: 0; background: #101826; color: #f3f5f7; font: 17px/1.6 system-ui, sans-serif; }
-main { max-width: 640px; margin: 12vh auto; padding: 24px; }
-h1 { font-size: 2.5rem; line-height: 1.15; }
-p { color: #a9b6c8; }
-a { display: block; padding: 20px; margin: 16px 0; border: 1px solid #44526a; border-radius: 12px; color: #f3f5f7; text-decoration: none; }
-a:hover, a:focus-visible { border-color: #ff6b1a; outline: 2px solid #ff6b1a; outline-offset: 3px; }
-strong, span { display: block; }
-span { color: #a9b6c8; font-size: 0.9rem; }
+:root{
+  --ink:#101826;--ink-2:#1a2539;--signal:#ff6b1a;--sun:#ffc93c;--sky:#5cc8ff;--mint:#6ee7a8;--pink:#ff8fb1;
+  --paper:#f3f5f7;--concrete:#e4e9ee;--line:#33425c;--mute-dark:#a9b6c8;--mute-light:#44526a;
+  --display:"Bricolage Grotesque","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --gut:22px;color-scheme:dark;
+}
+html,body{height:100%;margin:0;padding:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+p{margin:0}
+
+body{height:auto;min-height:100%;padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:560px;margin:0 auto;box-sizing:border-box;padding-top:max(28px,env(safe-area-inset-top,0px));padding-bottom:40px;padding-left:max(var(--gut),env(safe-area-inset-left,0px));padding-right:max(var(--gut),env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute-dark)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,10vw,3rem);letter-spacing:-.03em;line-height:1;margin:8px 0 10px}
+h1 span{color:var(--signal)}
+.intro{color:var(--mute-dark);max-width:36ch;font-size:1.05rem}
+.total{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;font-variant-numeric:tabular-nums}
+.total[hidden]{display:none}
+h2{font-family:var(--mono);font-weight:500;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin:30px 0 10px}
+.list{display:flex;flex-direction:column;gap:9px}
+.item{display:grid;grid-template-columns:34px 1fr;gap:3px 14px;align-items:center;text-decoration:none;background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:14px 14px;min-height:52px;transition:transform .12s,border-color .12s}
+.item:active{transform:scale(.985)}
+.item:hover{border-color:var(--signal)}
+.n{grid-row:1/4;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:var(--ink);font-family:var(--display);font-weight:800}
+.item.seen .n{background:var(--mint)}
+.t{font-family:var(--display);font-weight:800;font-size:1.18rem;line-height:1.15;min-width:0}
+.m{grid-column:2;grid-row:3;margin-top:4px;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sun)}
+.d{grid-column:2;color:var(--mute-dark);font-size:.92rem;line-height:1.3;min-width:0}
+.item.soon{opacity:.5;pointer-events:none}
+.item.soon .m::after{content:" · em breve"}
+.foot{margin-top:34px;color:var(--mute-dark);font-size:.9rem}
 </style>
 </head>
 <body>
-<main>
+<div class="wrap">
+<p class="eyebrow">IA sem mistério</p>
 <h1>Apresentações</h1>
-<p>Explore as apresentações e experiências interativas.</p>
-<a href="apresentacao-mcp.html"><strong>MCP em 2 minutos</strong><span>Uma apresentação rápida para conhecer o MCP.</span></a>
-<a href="missao-mcp.html"><strong>Missão MCP</strong><span>Aprenda explorando demonstrações, desafios e um quiz.</span></a>
-</main>
+<p class="intro">Leituras curtas com jogos e quiz, para ver no telemóvel. Siga a ordem ou salte para o que lhe interessa.</p>
+<span class="total" id="total" hidden></span>
+<h2>Parte 1 · Os alicerces</h2><div class="list">
+<a class="item" href="ia-vs-llm.html" data-slug="ia-vs-llm"><span class="n">1</span><span class="t">IA vs LLM</span><span class="d">Desporto e futebol: qual é a diferença?</span><span class="m">2 min</span></a>
+<a class="item" href="ia-inventa.html" data-slug="ia-inventa"><span class="n">2</span><span class="t">Porque é que a IA inventa</span><span class="d">Como a IA «pensa» e porque convém confirmar.</span><span class="m">2 min</span></a>
+<a class="item soon" aria-disabled="true" tabindex="-1" href="ia-aprende.html" data-slug="ia-aprende"><span class="n">3</span><span class="t">A IA aprende comigo?</span><span class="d">Estudar para o exame ou consultar apontamentos.</span><span class="m">2 min</span></a>
+</div>
+<h2>Parte 2 · Da conversa à ação</h2><div class="list">
+<a class="item soon" aria-disabled="true" tabindex="-1" href="llm-vs-agente.html" data-slug="llm-vs-agente"><span class="n">4</span><span class="t">LLM vs Agente</span><span class="d">Quem responde e quem trabalha.</span><span class="m">2 min</span></a>
+<a class="item" href="missao-mcp.html" data-slug="missao-mcp"><span class="n">5</span><span class="t">Missão MCP</span><span class="d">Aprenda explorando demonstrações, desafios e um quiz.</span><span class="m">3 min</span></a>
+<a class="item" href="apresentacao-mcp.html" data-slug="apresentacao-mcp"><span class="n">6</span><span class="t">MCP em 2 minutos</span><span class="d">Uma apresentação rápida para conhecer o MCP.</span><span class="m">2 min</span></a>
+</div>
+<h2>Parte 3 · Ensinar a IA a trabalhar à nossa maneira</h2><div class="list">
+<a class="item soon" aria-disabled="true" tabindex="-1" href="md-vs-skill.html" data-slug="md-vs-skill"><span class="n">7</span><span class="t">Ficheiro .md vs Skill</span><span class="d">A folha solta e o dossier com etiqueta.</span><span class="m">2 min</span></a>
+<a class="item soon" aria-disabled="true" tabindex="-1" href="skill-vs-agente.html" data-slug="skill-vs-agente"><span class="n">8</span><span class="t">Skill vs Agente</span><span class="d">O procedimento e quem o executa.</span><span class="m">2 min</span></a>
+</div>
+<h2>Parte 4 · Usar com cabeça</h2><div class="list">
+<a class="item soon" aria-disabled="true" tabindex="-1" href="privacidade.html" data-slug="privacidade"><span class="n">9</span><span class="t">O que posso pôr na IA?</span><span class="d">O que partilhar e o que guardar para si.</span><span class="m">2 min</span></a>
+</div>
+<p class="foot">Cada episódio dura cerca de 2 minutos.</p>
+</div>
+<script>
+(function(){
+  var done={};
+  try{ done=(JSON.parse(localStorage.getItem('iasm.v1')||'{}').done)||{}; }catch(e){}
+  var pts=0,any=false;
+  [].forEach.call(document.querySelectorAll('.item'),function(a){
+    var slug=a.getAttribute('data-slug'), p=done[slug];
+    if(p&&p.fin){a.classList.add('seen'); pts+=p.pts||0; any=true; a.querySelector('.m').textContent=a.querySelector('.m').textContent+' · ✓';}
+    try{ fetch(a.getAttribute('href'),{method:'HEAD',cache:'no-store'}).then(function(r){ if(r.ok){ a.classList.remove('soon'); a.removeAttribute('aria-disabled'); a.removeAttribute('tabindex'); } else if(r.status===404){ a.classList.add('soon'); a.setAttribute('aria-disabled','true'); a.setAttribute('tabindex','-1'); } }).catch(function(){}); }catch(e){}
+  });
+  if(pts>0){ var t=document.getElementById('total'); t.textContent='★ '+pts+' pontos'; t.hidden=false; }
+})();
+</script>
 </body>
 </html>

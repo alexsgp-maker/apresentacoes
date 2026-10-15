@@ -215,12 +215,17 @@ p { margin: 0; }
 @media (max-height: 680px) {
   h1 { font-size: 1.85rem; } h2 { font-size: 1.65rem; } .inner { gap: 11px; }
 }
+
+.exit { position:absolute;z-index:6;top:24px;left:max(var(--gut), env(safe-area-inset-left, 0px));font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:3px 10px;border-radius:999px;border:1.5px solid rgba(243,245,247,.4);color:var(--paper); }
+.stage.tone-light .exit { color:var(--ink);border-color:rgba(16,24,38,.4); }
+a.ghost { display:inline-block;text-decoration:none; }
 </style>
 
 <style>html,body{margin:0;padding:0}.stage{height:100vh;height:100dvh}</style>
 </head>
 <body>
 <main class="stage" id="stage" aria-label="Missão MCP">
+<a class="exit" href="index.html">← Menu</a>
   <div class="bars" id="bars" aria-hidden="true"></div>
   <div class="hud" id="hud" aria-live="polite">★ <span id="pts">0</span> pts</div>
 
@@ -343,6 +348,7 @@ p { margin: 0; }
         <div class="qfoot" style="justify-content:flex-start;flex-wrap:wrap">
           <button class="ghost" id="retry" type="button">Repetir o quiz</button>
           <button class="ghost" id="restart" type="button">Ver desde o início</button>
+          <a class="ghost" href="index.html">Voltar ao índice</a>
         </div>
       </div>
     </div>

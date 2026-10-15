@@ -229,12 +229,17 @@ p { margin: 0; }
   h1 { font-size: 1.9rem; } h2 { font-size: 1.7rem; }
   .inner { gap: 12px; } .fig { max-height: 26vh; }
 }
+
+.exit { position:absolute;z-index:6;top:24px;left:max(var(--gut), env(safe-area-inset-left, 0px));font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:3px 10px;border-radius:999px;border:1.5px solid rgba(243,245,247,.4);color:var(--paper); }
+.stage.tone-light .exit { color:var(--ink);border-color:rgba(16,24,38,.4); }
+a.ghost { display:inline-block;text-decoration:none; }
 </style>
 
 <style>html,body{margin:0;padding:0}.stage{height:100vh;height:100dvh}</style>
 </head>
 <body>
 <main class="stage" id="stage" aria-label="Apresentação sobre MCP">
+<a class="exit" href="index.html">← Menu</a>
   <div class="bars" id="bars" aria-hidden="true"></div>
 
   <!-- 1 · gancho -->
@@ -379,6 +384,7 @@ p { margin: 0; }
         </div>
         <button class="ghost" id="again" type="button">Votar outra vez</button>
         <button class="ghost" id="restart" type="button">Ver desde o início</button>
+          <a class="ghost" href="index.html">Voltar ao índice</a>
       </div>
     </div>
   </section>
